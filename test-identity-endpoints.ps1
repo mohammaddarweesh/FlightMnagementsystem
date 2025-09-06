@@ -14,8 +14,8 @@ $testUser = @{
 }
 
 $adminUser = @{
-    email = "admin@flightbooking.local"
-    password = "DevAdmin123!"
+    email = "admin@flightbooking.com"
+    password = "Admin123!@#"
 }
 
 Write-Host "`n🔍 Step 1: Testing Health Check" -ForegroundColor Yellow

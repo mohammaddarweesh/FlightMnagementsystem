@@ -10,7 +10,7 @@
 - **User Management**: Registration, email verification, password reset
 - **Security**: Rate limiting, password policies, IP tracking
 - **Guest Support**: Anonymous user tracking and conversion
-- **Admin User**: Pre-configured (`admin@flightbooking.local` / `DevAdmin123!`)
+- **Admin User**: Pre-configured (`admin@flightbooking.com` / `Admin123!@#`)
 
 #### **✅ Comprehensive Audit System (100% Complete)**
 - **Request Tracking**: Every HTTP request audited with correlation IDs

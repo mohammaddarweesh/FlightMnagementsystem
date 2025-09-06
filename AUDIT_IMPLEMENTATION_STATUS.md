@@ -142,7 +142,7 @@ dotnet run --project src/Api/FlightBooking.Api
 curl -X POST http://localhost:5001/api/auth/login \
   -H "Content-Type: application/json" \
   -H "X-Correlation-ID: test-123" \
-  -d '{"email":"admin@flightbooking.local","password":"DevAdmin123!"}'
+  -d '{"email":"admin@flightbooking.com","password":"Admin123!@#"}'
 ```
 
 ### **3. Query Audit Data**

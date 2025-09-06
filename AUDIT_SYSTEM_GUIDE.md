@@ -235,7 +235,7 @@ GET /api/audit/events?ipAddress=192.168.1.100&statusCode=401
 # 1. Make a login request
 curl -X POST http://localhost:5001/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@flightbooking.local","password":"DevAdmin123!"}'
+  -d '{"email":"admin@flightbooking.com","password":"Admin123!@#"}'
 
 # 2. Query recent audit events
 curl "http://localhost:5001/api/audit/events?pageSize=5&sortBy=timestamp&sortDirection=desc" \

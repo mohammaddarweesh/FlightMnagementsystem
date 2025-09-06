@@ -14,8 +14,8 @@
 - ✅ **Swagger UI**: Available at http://localhost:5001/swagger
 
 ### 🔐 **Admin User Confirmed**
-- **Email**: `admin@flightbooking.local`
-- **Password**: `DevAdmin123!`
+- **Email**: `admin@flightbooking.com`
+- **Password**: `Admin123!@#`
 - **Status**: Auto-created and ready for use
 
 ### 🌐 **Available Endpoints**
@@ -178,7 +178,7 @@ curl -X POST "http://localhost:5001/api/auth/verify-email?token=YOUR_TOKEN"
 4. Login with new password
 
 ### **3. Admin Functions**
-1. Login as admin (`admin@flightbooking.local` / `DevAdmin123!`)
+1. Login as admin (`admin@flightbooking.com` / `Admin123!@#`)
 2. Test role assignment endpoints
 3. Test user management functions
 

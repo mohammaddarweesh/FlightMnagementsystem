@@ -185,8 +185,8 @@ The API will be available at:
 ## 🔐 Default Test Credentials
 
 ### Admin User
-- **Email**: `admin@flightbooking.local`
-- **Password**: `DevAdmin123!`
+- **Email**: `admin@flightbooking.com`
+- **Password**: `Admin123!@#`
 - **Roles**: Admin, Staff
 - **Permissions**: Full access to all endpoints
 

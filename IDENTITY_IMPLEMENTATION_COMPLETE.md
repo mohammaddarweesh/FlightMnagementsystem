@@ -72,8 +72,8 @@
 
 ### 📋 **Admin User (Auto-Created)**
 ```
-Email: admin@flightbooking.local
-Password: DevAdmin123!
+Email: admin@flightbooking.com
+Password: Admin123!@#
 Roles: Admin
 ```
 
@@ -107,10 +107,10 @@ Roles: Admin
     "RefreshTokenExpiryDays": 30
   },
   "AdminUser": {
-    "Email": "admin@flightbooking.local",
-    "Password": "DevAdmin123!",
-    "FirstName": "Development",
-    "LastName": "Admin"
+    "Email": "admin@flightbooking.com",
+    "Password": "Admin123!@#",
+    "FirstName": "System",
+    "LastName": "Administrator"
   }
 }
 ```
@@ -140,8 +140,8 @@ curl -X POST http://localhost:5000/api/auth/register \
 curl -X POST http://localhost:5000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "admin@flightbooking.local",
-    "password": "DevAdmin123!"
+    "email": "admin@flightbooking.com",
+    "password": "Admin123!@#"
   }'
 ```
 

@@ -13,6 +13,7 @@ using Hellang.Middleware.ProblemDetails;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Serilog;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -110,6 +111,53 @@ app.UseHangfireDashboard(builder.Configuration);
 if (!builder.Configuration.GetValue<bool>("Testing:SkipRecurringJobs"))
 {
     app.ConfigureRecurringJobs(builder.Configuration);
+}
+
+// Open browser to API documentation in development mode
+if (app.Environment.IsDevelopment())
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    var urls = app.Urls.ToArray();
+
+    if (urls.Length > 0)
+    {
+        var baseUrl = urls[0];
+        var docsUrl = $"{baseUrl}/api-docs";
+
+        logger.LogInformation("🚀 Application started successfully!");
+        logger.LogInformation("📚 Opening API Documentation at: {DocsUrl}", docsUrl);
+        logger.LogInformation("🔗 Available endpoints:");
+        logger.LogInformation("   • Main API Docs: {BaseUrl}/api-docs", baseUrl);
+        logger.LogInformation("   • Health Check: {BaseUrl}/health", baseUrl);
+        logger.LogInformation("   • Hangfire Dashboard: {BaseUrl}/hangfire", baseUrl);
+
+        // Open browser to documentation
+        try
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = docsUrl,
+                    UseShellExecute = true
+                });
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                Process.Start("xdg-open", docsUrl);
+            }
+            else if (OperatingSystem.IsMacOS())
+            {
+                Process.Start("open", docsUrl);
+            }
+
+            logger.LogInformation("✅ Browser opened to API documentation");
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "⚠️ Could not automatically open browser. Please navigate to {DocsUrl} manually", docsUrl);
+        }
+    }
 }
 
 app.Run();
