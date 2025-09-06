@@ -1,0 +1,428 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Flight Booking Management System API",
+    "description": "A comprehensive flight booking and management system with analytics, pricing, and booking capabilities.",
+    "version": "v1",
+    "contact": {
+      "name": "Flight Booking Team",
+      "email": "support@flightbooking.com",
+      "url": "https://github.com/flightbooking/api"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://localhost:5001",
+      "description": "Development server"
+    },
+    {
+      "url": "https://api.flightbooking.com",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/api/analytics/summary": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get analytics summary",
+        "description": "Retrieves comprehensive analytics summary including revenue, bookings, demographics, and performance metrics for the specified date range.",
+        "operationId": "GetAnalyticsSummary",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "example": "2024-01-01"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "example": "2024-01-31"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Analytics summary retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsSummary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid date range provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - insufficient permissions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/analytics/revenue": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get revenue analytics",
+        "description": "Retrieves revenue analytics data with optional filtering by route, fare class, and airline.",
+        "operationId": "GetRevenueAnalytics",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "routeCodes",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": ["NYC-LAX", "NYC-CHI"]
+          },
+          {
+            "name": "fareClasses",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": ["Economy", "Business"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Revenue analytics data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RevenueAnalytics"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/analytics/export/csv": {
+      "post": {
+        "tags": ["Analytics"],
+        "summary": "Export analytics data to CSV",
+        "description": "Exports analytics data in CSV format with customizable configuration options.",
+        "operationId": "ExportAnalyticsDataToCsv",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CsvExportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "CSV export completed successfully",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalyticsSummary": {
+        "type": "object",
+        "properties": {
+          "totalRevenue": {
+            "type": "number",
+            "format": "decimal",
+            "example": 1250000.00
+          },
+          "totalBookings": {
+            "type": "integer",
+            "example": 2775
+          },
+          "totalPassengers": {
+            "type": "integer",
+            "example": 5200
+          },
+          "averageTicketPrice": {
+            "type": "number",
+            "format": "decimal",
+            "example": 450.00
+          },
+          "loadFactor": {
+            "type": "number",
+            "format": "decimal",
+            "example": 82.5
+          },
+          "onTimePerformance": {
+            "type": "number",
+            "format": "decimal",
+            "example": 87.2
+          }
+        }
+      },
+      "RevenueAnalytics": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "example": "2024-01-01"
+          },
+          "routeCode": {
+            "type": "string",
+            "example": "NYC-LAX"
+          },
+          "fareClass": {
+            "type": "string",
+            "example": "Economy"
+          },
+          "airlineCode": {
+            "type": "string",
+            "example": "AA"
+          },
+          "totalBookings": {
+            "type": "integer",
+            "example": 150
+          },
+          "totalRevenue": {
+            "type": "number",
+            "format": "decimal",
+            "example": 67500.00
+          },
+          "lastRefreshed": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CsvExportRequest": {
+        "type": "object",
+        "required": ["dataType", "dateRange"],
+        "properties": {
+          "dataType": {
+            "type": "string",
+            "enum": ["Revenue", "BookingStatus", "Demographics", "RoutePerformance", "All"],
+            "example": "Revenue"
+          },
+          "dateRange": {
+            "$ref": "#/components/schemas/DateRange"
+          },
+          "filters": {
+            "$ref": "#/components/schemas/AnalyticsFilter"
+          },
+          "configuration": {
+            "$ref": "#/components/schemas/ExportConfiguration"
+          }
+        }
+      },
+      "DateRange": {
+        "type": "object",
+        "required": ["startDate", "endDate"],
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2024-01-01"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2024-01-31"
+          }
+        }
+      },
+      "AnalyticsFilter": {
+        "type": "object",
+        "properties": {
+          "routeCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["NYC-LAX", "NYC-CHI"]
+          },
+          "fareClasses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["Economy", "Business"]
+          },
+          "airlineCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["AA", "UA"]
+          }
+        }
+      },
+      "ExportConfiguration": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": ["CSV", "Excel", "JSON", "PDF"],
+            "example": "CSV"
+          },
+          "includeHeaders": {
+            "type": "boolean",
+            "example": true
+          },
+          "includeMetadata": {
+            "type": "boolean",
+            "example": true
+          },
+          "fileName": {
+            "type": "string",
+            "example": "revenue_analytics_export.csv"
+          },
+          "maxRows": {
+            "type": "integer",
+            "example": 10000
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+          },
+          "title": {
+            "type": "string",
+            "example": "One or more validation errors occurred."
+          },
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "The request contains invalid data"
+          },
+          "instance": {
+            "type": "string",
+            "example": "/api/analytics/revenue"
+          },
+          "traceId": {
+            "type": "string",
+            "example": "0HN7SPBVKQAAA:00000001"
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": {
+              "startDate": ["Start date cannot be in the future"],
+              "endDate": ["End date must be after start date"]
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below."
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Analytics",
+      "description": "Analytics and reporting operations for business intelligence"
+    }
+  ]
+}

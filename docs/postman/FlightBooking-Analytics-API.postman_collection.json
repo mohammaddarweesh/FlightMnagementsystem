@@ -1,0 +1,679 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Flight Booking Analytics API",
+		"description": "Comprehensive collection for testing Flight Booking Management System Analytics API endpoints.\n\nThis collection includes:\n- Revenue analytics and trends\n- Booking status analytics\n- Passenger demographics\n- Route performance metrics\n- CSV export functionality\n- Dashboard data\n\nAll endpoints require authentication. Use the environment variables to configure base URL and authentication tokens.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345678"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('access_token', response.accessToken);",
+									"    pm.environment.set('refresh_token', response.refreshToken);",
+									"    console.log('Authentication successful');",
+									"} else {",
+									"    console.log('Authentication failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{admin_email}}\",\n    \"password\": \"{{admin_password}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Analytics Dashboard",
+			"item": [
+				{
+					"name": "Get Analytics Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/summary?startDate={{start_date}}&endDate={{end_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"summary"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dashboard Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/dashboard?startDate={{start_date}}&endDate={{end_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"dashboard"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Revenue Analytics",
+			"item": [
+				{
+					"name": "Get Revenue Analytics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/revenue?startDate={{start_date}}&endDate={{end_date}}&routeCodes=NYC-LAX,NYC-CHI&fareClasses=Economy,Business",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"revenue"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								},
+								{
+									"key": "routeCodes",
+									"value": "NYC-LAX,NYC-CHI"
+								},
+								{
+									"key": "fareClasses",
+									"value": "Economy,Business"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Revenue Trends",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/trends/revenue?startDate={{start_date}}&endDate={{end_date}}&period=Daily",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"trends",
+								"revenue"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								},
+								{
+									"key": "period",
+									"value": "Daily"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Total Revenue",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/revenue/total?startDate={{start_date}}&endDate={{end_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"revenue",
+								"total"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Booking Analytics",
+			"item": [
+				{
+					"name": "Get Booking Status Analytics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/booking-status?startDate={{start_date}}&endDate={{end_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"booking-status"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Booking Status Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/booking-status/summary?startDate={{start_date}}&endDate={{end_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"booking-status",
+								"summary"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Demographics Analytics",
+			"item": [
+				{
+					"name": "Get Passenger Demographics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/demographics?startDate={{start_date}}&endDate={{end_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"demographics"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Demographics Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/demographics/summary?startDate={{start_date}}&endDate={{end_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"demographics",
+								"summary"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Route Performance",
+			"item": [
+				{
+					"name": "Get Route Performance Analytics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/route-performance?startDate={{start_date}}&endDate={{end_date}}&routeCodes=NYC-LAX,NYC-CHI",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"route-performance"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								},
+								{
+									"key": "routeCodes",
+									"value": "NYC-LAX,NYC-CHI"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Top Performing Routes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/route-performance/top?startDate={{start_date}}&endDate={{end_date}}&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"route-performance",
+								"top"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Performance Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/route-performance/summary?startDate={{start_date}}&endDate={{end_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"route-performance",
+								"summary"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Data Export",
+			"item": [
+				{
+					"name": "Export Revenue Data to CSV",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dataType\": \"Revenue\",\n    \"dateRange\": {\n        \"startDate\": \"{{start_date}}\",\n        \"endDate\": \"{{end_date}}\"\n    },\n    \"filters\": {\n        \"dateRange\": {\n            \"startDate\": \"{{start_date}}\",\n            \"endDate\": \"{{end_date}}\"\n        },\n        \"routeCodes\": [\"NYC-LAX\", \"NYC-CHI\"],\n        \"fareClasses\": [\"Economy\", \"Business\"]\n    },\n    \"configuration\": {\n        \"format\": \"CSV\",\n        \"includeHeaders\": true,\n        \"includeMetadata\": true,\n        \"fileName\": \"revenue_analytics_export.csv\",\n        \"maxRows\": 10000\n    }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/analytics/export/csv",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"export",
+								"csv"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export Booking Status Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dataType\": \"BookingStatus\",\n    \"dateRange\": {\n        \"startDate\": \"{{start_date}}\",\n        \"endDate\": \"{{end_date}}\"\n    },\n    \"configuration\": {\n        \"format\": \"CSV\",\n        \"includeHeaders\": true,\n        \"fileName\": \"booking_status_export.csv\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/analytics/export/csv",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"export",
+								"csv"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Data Refresh",
+			"item": [
+				{
+					"name": "Refresh Analytics Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/refresh?viewName=revenue",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"refresh"
+							],
+							"query": [
+								{
+									"key": "viewName",
+									"value": "revenue"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Refresh Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/analytics/refresh/status?viewName=revenue",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"refresh",
+								"status"
+							],
+							"query": [
+								{
+									"key": "viewName",
+									"value": "revenue"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Set default dates if not already set",
+					"if (!pm.environment.get('start_date')) {",
+					"    const startDate = new Date();",
+					"    startDate.setMonth(startDate.getMonth() - 1);",
+					"    pm.environment.set('start_date', startDate.toISOString().split('T')[0]);",
+					"}",
+					"",
+					"if (!pm.environment.get('end_date')) {",
+					"    const endDate = new Date();",
+					"    pm.environment.set('end_date', endDate.toISOString().split('T')[0]);",
+					"}"
+				]
+			}
+		}
+	]
+}

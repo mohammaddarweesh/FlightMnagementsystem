@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.AspNetCore" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\FlightBooking.Domain\FlightBooking.Domain.csproj" />
+    <ProjectReference Include="..\..\Contracts\FlightBooking.Contracts\FlightBooking.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>
