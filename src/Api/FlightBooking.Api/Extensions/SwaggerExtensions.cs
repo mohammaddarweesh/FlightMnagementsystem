@@ -24,12 +24,7 @@ public static class SwaggerExtensions
                 Version = "v1",
                 Title = "Flight Booking Management System API",
                 Description = "A comprehensive flight booking and management system with analytics, pricing, and booking capabilities.",
-                Contact = new OpenApiContact
-                {
-                    Name = "Flight Booking Team",
-                    Email = "support@flightbooking.com",
-                    Url = new Uri("https://github.com/flightbooking/api")
-                },
+                
                 License = new OpenApiLicense
                 {
                     Name = "MIT License",

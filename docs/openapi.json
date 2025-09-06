@@ -4,11 +4,7 @@
     "title": "Flight Booking Management System API",
     "description": "A comprehensive flight booking and management system with analytics, pricing, and booking capabilities.",
     "version": "v1",
-    "contact": {
-      "name": "Flight Booking Team",
-      "email": "support@flightbooking.com",
-      "url": "https://github.com/flightbooking/api"
-    },
+    
     "license": {
       "name": "MIT License",
       "url": "https://opensource.org/licenses/MIT"
