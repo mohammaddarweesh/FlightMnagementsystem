@@ -1,5 +1,5 @@
 -- Create the Hangfire database if it doesn't exist
-CREATE DATABASE flightbookinghangfire
+CREATE DATABASE flightbookinghangfire_mohammaddarweesh
     WITH 
     OWNER = postgres
     ENCODING = 'UTF8'

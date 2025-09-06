@@ -11,6 +11,7 @@ using FlightBooking.Infrastructure.Search.DependencyInjection;
 using FlightBooking.Infrastructure.Pricing.DependencyInjection;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -70,16 +71,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health");
 
-// Configure Hangfire Dashboard
-app.UseHangfireDashboard(builder.Configuration);
-
-// Skip recurring jobs in test mode
-if (!builder.Configuration.GetValue<bool>("Testing:SkipRecurringJobs"))
-{
-    app.ConfigureRecurringJobs(builder.Configuration);
-}
-
-// Run migrations and seed database (skip in test mode)
+// Create databases and run migrations BEFORE Hangfire initialization
 if (!builder.Configuration.GetValue<bool>("Testing:SkipRecurringJobs"))
 {
     using var scope = app.Services.CreateScope();
@@ -88,11 +80,17 @@ if (!builder.Configuration.GetValue<bool>("Testing:SkipRecurringJobs"))
 
     try
     {
+        // Step 1: Create Hangfire database FIRST (before main database migration)
+        logger.LogInformation("Creating Hangfire database...");
+        await CreateHangfireDatabaseAsync(builder.Configuration, logger);
+        logger.LogInformation("Hangfire database creation completed");
+
+        // Step 2: Run main database migrations
         logger.LogInformation("Running database migrations...");
         await context.Database.MigrateAsync();
         logger.LogInformation("Database migrations completed successfully");
 
-        // Seed database
+        // Step 3: Seed database
         logger.LogInformation("Starting database seeding...");
         var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
         await seeder.SeedAsync();
@@ -105,7 +103,48 @@ if (!builder.Configuration.GetValue<bool>("Testing:SkipRecurringJobs"))
     }
 }
 
+// Configure Hangfire Dashboard (after database is ready)
+app.UseHangfireDashboard(builder.Configuration);
+
+// Skip recurring jobs in test mode
+if (!builder.Configuration.GetValue<bool>("Testing:SkipRecurringJobs"))
+{
+    app.ConfigureRecurringJobs(builder.Configuration);
+}
+
 app.Run();
+
+// Helper method to create Hangfire database
+static async Task CreateHangfireDatabaseAsync(IConfiguration configuration, Microsoft.Extensions.Logging.ILogger logger)
+{
+    try
+    {
+        string postgresConnectionString = "Host=localhost;Database=postgres;Username=postgres;Password=6482297";
+        using NpgsqlConnection connection = new NpgsqlConnection(postgresConnectionString);
+        await connection.OpenAsync();
+
+        // Check if database exists
+        using NpgsqlCommand checkCmd = new NpgsqlCommand("SELECT 1 FROM pg_database WHERE datname = 'flightbookinghangfire_mohammaddarweesh'", connection);
+        object? exists = await checkCmd.ExecuteScalarAsync();
+
+        if (exists == null)
+        {
+            // Create the database
+            using NpgsqlCommand createCmd = new NpgsqlCommand("CREATE DATABASE flightbookinghangfire_mohammaddarweesh", connection);
+            await createCmd.ExecuteNonQueryAsync();
+            logger.LogInformation("Hangfire database 'flightbookinghangfire_mohammaddarweesh' created successfully.");
+        }
+        else
+        {
+            logger.LogInformation("Hangfire database 'flightbookinghangfire_mohammaddarweesh' already exists.");
+        }
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Error creating Hangfire database: {Message}", ex.Message);
+        throw;
+    }
+}
 
 // Make Program class accessible for integration tests
 public partial class Program { }

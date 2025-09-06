@@ -1,8 +1,8 @@
 -- Check if Hangfire database exists
-SELECT datname FROM pg_database WHERE datname = 'flightbookinghangfire';
+SELECT datname FROM pg_database WHERE datname = 'flightbookinghangfire_mohammaddarweesh';
 
 -- Connect to the Hangfire database
-\c flightbookinghangfire;
+\c flightbookinghangfire_mohammaddarweesh;
 
 -- Check all tables in the Hangfire database
 SELECT table_name, table_schema 

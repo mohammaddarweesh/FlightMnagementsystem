@@ -87,19 +87,19 @@ async Task CreateHangfireDatabaseAsync()
         await connection.OpenAsync();
 
         // Check if database exists
-        var checkCmd = new NpgsqlCommand("SELECT 1 FROM pg_database WHERE datname = 'flightbookinghangfire'", connection);
+        var checkCmd = new NpgsqlCommand("SELECT 1 FROM pg_database WHERE datname = 'flightbookinghangfire_mohammaddarweesh'", connection);
         var exists = await checkCmd.ExecuteScalarAsync();
 
         if (exists == null)
         {
             // Create the database
-            var createCmd = new NpgsqlCommand("CREATE DATABASE flightbookinghangfire", connection);
+            var createCmd = new NpgsqlCommand("CREATE DATABASE flightbookinghangfire_mohammaddarweesh", connection);
             await createCmd.ExecuteNonQueryAsync();
-            Console.WriteLine("Hangfire database 'flightbookinghangfire' created successfully.");
+            Console.WriteLine("Hangfire database 'flightbookinghangfire_mohammaddarweesh' created successfully.");
         }
         else
         {
-            Console.WriteLine("Hangfire database 'flightbookinghangfire' already exists.");
+            Console.WriteLine("Hangfire database 'flightbookinghangfire_mohammaddarweesh' already exists.");
         }
     }
     catch (Exception ex)
