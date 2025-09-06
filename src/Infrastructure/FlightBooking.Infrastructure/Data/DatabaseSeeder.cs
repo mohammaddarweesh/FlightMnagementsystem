@@ -41,6 +41,9 @@ public class DatabaseSeeder
             // Seed admin user
             await SeedAdminUserAsync();
 
+            // Seed default users
+            await SeedDefaultUsersAsync();
+
             // Seed flight data
             var flightSeederLogger = _loggerFactory.CreateLogger<FlightSeeder>();
             var flightSeeder = new FlightSeeder(_context, flightSeederLogger);
@@ -136,6 +139,76 @@ public class DatabaseSeeder
         else
         {
             _logger.LogError("Admin role not found. Cannot assign admin role to user.");
+        }
+    }
+
+    private async Task SeedDefaultUsersAsync()
+    {
+        // Seed Staff User
+        await SeedUserAsync(
+            email: "staff@flightbooking.com",
+            password: "Staff123!",
+            firstName: "Staff",
+            lastName: "User",
+            roleName: Role.Names.Staff
+        );
+
+        // Seed Customer User
+        await SeedUserAsync(
+            email: "customer@example.com",
+            password: "Customer123!",
+            firstName: "Customer",
+            lastName: "User",
+            roleName: Role.Names.Customer
+        );
+    }
+
+    private async Task SeedUserAsync(string email, string password, string firstName, string lastName, string roleName)
+    {
+        // Check if user already exists
+        var existingUser = await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == email);
+
+        if (existingUser != null)
+        {
+            _logger.LogInformation("User already exists: {Email}", email);
+            return;
+        }
+
+        // Create user
+        var user = new User
+        {
+            Email = email,
+            FirstName = firstName,
+            LastName = lastName,
+            PasswordHash = _passwordService.HashPassword(password),
+            EmailVerified = true,
+            EmailVerifiedAt = DateTime.UtcNow,
+            IsActive = true
+        };
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync(); // Save to get the user ID
+
+        // Assign role
+        var role = await _context.Roles
+            .FirstOrDefaultAsync(r => r.Name == roleName);
+
+        if (role != null)
+        {
+            var userRole = new UserRole
+            {
+                UserId = user.Id,
+                RoleId = role.Id,
+                AssignedAt = DateTime.UtcNow
+            };
+
+            _context.UserRoles.Add(userRole);
+            _logger.LogInformation("Created user: {Email} with role: {Role}", email, roleName);
+        }
+        else
+        {
+            _logger.LogError("Role {RoleName} not found. Cannot assign role to user {Email}.", roleName, email);
         }
     }
 }
