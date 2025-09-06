@@ -6,6 +6,7 @@ Welcome to the comprehensive documentation for the Flight Booking Management Sys
 
 ### 🚀 Getting Started
 - [**Developer README**](./README.md) - Complete setup and quickstart guide
+- [**User Guide**](./user-guide.md) - How the system works for end users
 - [Installation Guide](./installation.md) - Detailed installation instructions
 - [Configuration Guide](./configuration.md) - System configuration options
 
@@ -25,11 +26,11 @@ Welcome to the comprehensive documentation for the Flight Booking Management Sys
 
 ### 🏗️ Architecture & Design
 - [System Architecture](./architecture.md) - High-level system design
-- [Database Schema](./database-schema.md) - Database design and relationships
+- [**Database Schema**](./database-schema.md) - Database design and relationships
 - [Analytics Architecture](./analytics-architecture.md) - Analytics system design
 
 ### 🚀 Deployment
-- [Deployment Guide](./deployment.md) - Production deployment instructions
+- [**Deployment Guide**](./deployment-guide.md) - Production deployment instructions
 - [Docker Guide](./docker.md) - Containerization and Docker Compose
 - [Environment Configuration](./environment.md) - Environment-specific settings
 
@@ -42,16 +43,19 @@ Welcome to the comprehensive documentation for the Flight Booking Management Sys
 
 ### For Developers
 - **Start Here**: [Developer README](./README.md)
+- **System Overview**: [Complete System Guide](../SYSTEM_OVERVIEW.md)
 - **API Testing**: [Postman Collection](./postman/FlightBooking-Analytics-API.postman_collection.json)
 - **Quick Examples**: [cURL Examples](./curl/quick-examples.md)
 
 ### For DevOps/Infrastructure
-- **Deployment**: [Deployment Guide](./deployment.md)
+- **Deployment**: [Deployment Guide](./deployment-guide.md)
+- **Database Design**: [Database Schema](./database-schema.md)
 - **Configuration**: [Environment Configuration](./environment.md)
 - **Monitoring**: [Monitoring Guide](./monitoring.md)
 
 ### For API Consumers
 - **API Specification**: [OpenAPI JSON](./openapi.json)
+- **User Guide**: [How the System Works](./user-guide.md)
 - **Authentication**: [Authentication Guide](./authentication.md)
 - **Rate Limiting**: [Rate Limiting Guide](./rate-limiting.md)
 
