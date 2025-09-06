@@ -1,12 +1,23 @@
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-var connectionString = "Host=localhost;Database=FlightBookingDB;Username=postgres;Password=6482297";
+// Build configuration
+var basePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) ?? Directory.GetCurrentDirectory();
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(basePath)
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
+
+var connectionString = configuration.GetConnectionString("DefaultConnection");
 
 try
 {
+    // First, create the Hangfire database if it doesn't exist
+    await CreateHangfireDatabaseAsync();
+
     using var connection = new NpgsqlConnection(connectionString);
     await connection.OpenAsync();
-    
+
     Console.WriteLine("Connected to database successfully.");
     
     // Check if migrations table exists
@@ -63,4 +74,36 @@ catch (Exception ex)
 {
     Console.WriteLine($"Error: {ex.Message}");
     Console.WriteLine($"Stack trace: {ex.StackTrace}");
+}
+
+async Task CreateHangfireDatabaseAsync()
+{
+    try
+    {
+        // Connection to postgres database to create the hangfire database
+        var postgresConnectionString = "Host=localhost;Database=postgres;Username=postgres;Password=6482297";
+
+        using var connection = new NpgsqlConnection(postgresConnectionString);
+        await connection.OpenAsync();
+
+        // Check if database exists
+        var checkCmd = new NpgsqlCommand("SELECT 1 FROM pg_database WHERE datname = 'flightbookinghangfire'", connection);
+        var exists = await checkCmd.ExecuteScalarAsync();
+
+        if (exists == null)
+        {
+            // Create the database
+            var createCmd = new NpgsqlCommand("CREATE DATABASE flightbookinghangfire", connection);
+            await createCmd.ExecuteNonQueryAsync();
+            Console.WriteLine("Hangfire database 'flightbookinghangfire' created successfully.");
+        }
+        else
+        {
+            Console.WriteLine("Hangfire database 'flightbookinghangfire' already exists.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error creating Hangfire database: {ex.Message}");
+    }
 }

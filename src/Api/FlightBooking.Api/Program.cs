@@ -10,6 +10,7 @@ using FlightBooking.Infrastructure.Logging;
 using FlightBooking.Infrastructure.Search.DependencyInjection;
 using FlightBooking.Infrastructure.Pricing.DependencyInjection;
 using Hellang.Middleware.ProblemDetails;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -78,13 +79,29 @@ if (!builder.Configuration.GetValue<bool>("Testing:SkipRecurringJobs"))
     app.ConfigureRecurringJobs(builder.Configuration);
 }
 
-// Seed database (skip in test mode)
+// Run migrations and seed database (skip in test mode)
 if (!builder.Configuration.GetValue<bool>("Testing:SkipRecurringJobs"))
 {
-    using (var scope = app.Services.CreateScope())
+    using var scope = app.Services.CreateScope();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    try
     {
+        logger.LogInformation("Running database migrations...");
+        await context.Database.MigrateAsync();
+        logger.LogInformation("Database migrations completed successfully");
+
+        // Seed database
+        logger.LogInformation("Starting database seeding...");
         var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
         await seeder.SeedAsync();
+        logger.LogInformation("Database seeding completed");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Error during database initialization");
+        throw;
     }
 }
 

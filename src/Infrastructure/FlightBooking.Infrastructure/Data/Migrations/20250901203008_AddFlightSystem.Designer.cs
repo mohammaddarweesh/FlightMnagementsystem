@@ -571,7 +571,10 @@ namespace FlightBooking.Infrastructure.Data.Migrations
                     b.Property<DateTime>("DepartureDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<TimeSpan>("DepartureTime")
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<TimeSpan>("DepartureTimeSpan")
                         .HasColumnType("interval");
 
                     b.Property<string>("FlightNumber")

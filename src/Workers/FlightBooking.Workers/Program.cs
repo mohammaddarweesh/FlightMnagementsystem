@@ -98,13 +98,12 @@ public class Program
 
         try
         {
-            logger.LogInformation("Ensuring database is created and migrated");
+            logger.LogInformation("Running database migrations...");
 
-            // Add database migration logic here if needed
-            // var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            // await context.Database.MigrateAsync();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            await context.Database.MigrateAsync();
 
-            logger.LogInformation("Database is ready");
+            logger.LogInformation("Database migrations completed successfully");
         }
         catch (Exception ex)
         {

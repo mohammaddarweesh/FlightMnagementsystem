@@ -15,21 +15,6 @@ namespace FlightBooking.Infrastructure.Data.Migrations
             migrationBuilder.EnsureSchema(
                 name: "hangfire");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DepartureTime",
-                table: "Flights",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(TimeSpan),
-                oldType: "interval");
-
-            migrationBuilder.AddColumn<TimeSpan>(
-                name: "DepartureTimeSpan",
-                table: "Flights",
-                type: "interval",
-                nullable: false,
-                defaultValue: new TimeSpan(0, 0, 0, 0, 0));
-
             migrationBuilder.AddColumn<int>(
                 name: "TotalSeats",
                 table: "Flights",
@@ -754,20 +739,8 @@ namespace FlightBooking.Infrastructure.Data.Migrations
                 name: "Bookings");
 
             migrationBuilder.DropColumn(
-                name: "DepartureTimeSpan",
-                table: "Flights");
-
-            migrationBuilder.DropColumn(
                 name: "TotalSeats",
                 table: "Flights");
-
-            migrationBuilder.AlterColumn<TimeSpan>(
-                name: "DepartureTime",
-                table: "Flights",
-                type: "interval",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
 
             migrationBuilder.UpdateData(
                 table: "Roles",

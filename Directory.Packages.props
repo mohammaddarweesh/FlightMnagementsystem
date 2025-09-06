@@ -5,6 +5,8 @@
   </PropertyGroup>
   <ItemGroup Label="Core Framework">
     <PackageVersion Include="Microsoft.AspNetCore.App" Version="8.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.4" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Filters" Version="9.0.0" />
