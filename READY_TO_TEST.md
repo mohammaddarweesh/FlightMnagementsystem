@@ -30,9 +30,11 @@ choco install redis-64
 ### Step 2: Create PostgreSQL Databases
 Open **pgAdmin** and create these databases:
 ```sql
-CREATE DATABASE "FlightBookingDb_Dev";
-CREATE DATABASE "FlightBookingHangfire_Dev";
+CREATE DATABASE "FlightBookingDb_MohammadDarweesh";
+CREATE DATABASE "flightbookinghangfire_mohammaddarweesh";
 ```
+
+**Note**: Databases are now automatically created on application startup, but you can create them manually if preferred.
 
 ### Step 3: Start Redis
 ```bash
@@ -76,7 +78,7 @@ Once you run `dotnet run --project src/Api/FlightBooking.Api`, test these URLs:
 ```json
 {
   "status": "Connected",
-  "database": "FlightBookingDb_Dev",
+  "database": "FlightBookingDb_MohammadDarweesh",
   "message": "Successfully connected to PostgreSQL"
 }
 ```

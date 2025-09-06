@@ -29,9 +29,8 @@ choco install postgresql
 net start postgresql-x64-15
 
 # Create database
-psql -U postgres -c "CREATE DATABASE FlightBookingDb;"
-psql -U postgres -c "CREATE USER flightbooking WITH PASSWORD 'FlightBooking123!';"
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE FlightBookingDb TO flightbooking;"
+psql -U postgres -c "CREATE DATABASE \"FlightBookingDb_MohammadDarweesh\";"
+psql -U postgres -c "CREATE DATABASE \"flightbookinghangfire_mohammaddarweesh\";"
 ```
 
 #### macOS (using Homebrew)
@@ -43,9 +42,8 @@ brew install postgresql@15
 brew services start postgresql@15
 
 # Create database
-createdb FlightBookingDb
-psql FlightBookingDb -c "CREATE USER flightbooking WITH PASSWORD 'FlightBooking123!';"
-psql FlightBookingDb -c "GRANT ALL PRIVILEGES ON DATABASE FlightBookingDb TO flightbooking;"
+createdb "FlightBookingDb_MohammadDarweesh"
+createdb "flightbookinghangfire_mohammaddarweesh"
 ```
 
 #### Linux (Ubuntu/Debian)
@@ -59,23 +57,25 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 
 # Create database
-sudo -u postgres createdb FlightBookingDb
-sudo -u postgres psql -c "CREATE USER flightbooking WITH PASSWORD 'FlightBooking123!';"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE FlightBookingDb TO flightbooking;"
+sudo -u postgres createdb "FlightBookingDb_MohammadDarweesh"
+sudo -u postgres createdb "flightbookinghangfire_mohammaddarweesh"
 ```
 
 #### Docker (Alternative)
 ```bash
 # Run PostgreSQL in Docker
 docker run --name flightbooking-postgres \
-  -e POSTGRES_DB=FlightBookingDb \
-  -e POSTGRES_USER=flightbooking \
-  -e POSTGRES_PASSWORD=FlightBooking123! \
+  -e POSTGRES_DB=FlightBookingDb_MohammadDarweesh \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=6482297 \
   -p 5432:5432 \
   -d postgres:15
 
 # Wait for container to be ready
-docker exec -it flightbooking-postgres pg_isready -U flightbooking
+docker exec -it flightbooking-postgres pg_isready -U postgres
+
+# Create Hangfire database
+docker exec -it flightbooking-postgres psql -U postgres -c "CREATE DATABASE \"flightbookinghangfire_mohammaddarweesh\";"
 ```
 
 ### 3. Install and Configure Redis
@@ -128,39 +128,40 @@ docker exec -it flightbooking-redis redis-cli ping
 
 ### 4. Configure Application Settings
 
-Update the connection strings in `src/Api/FlightBooking.Api/appsettings.json`:
+Current connection strings in `src/Api/FlightBooking.Api/appsettings.json`:
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=FlightBookingDb;Username=flightbooking;Password=FlightBooking123!",
-    "Redis": "localhost:6379"
+    "DefaultConnection": "Host=localhost;Database=FlightBookingDb_MohammadDarweesh;Username=postgres;Password=6482297",
+    "Redis": "localhost:6379",
+    "Hangfire": "Host=localhost;Database=flightbookinghangfire_mohammaddarweesh;Username=postgres;Password=6482297"
   }
 }
 ```
 
-For development, you can also use user secrets:
+**Note**: The application automatically creates databases and runs migrations on startup.
 
-```bash
-cd src/Api/FlightBooking.Api
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Database=FlightBookingDb;Username=flightbooking;Password=FlightBooking123!"
-dotnet user-secrets set "ConnectionStrings:Redis" "localhost:6379"
-```
+### 5. Database Setup
 
-### 5. Apply Entity Framework Migrations
+**Automatic Setup (Recommended):**
+The application automatically creates databases and runs migrations on startup. Just run the application:
 
 ```bash
 # Navigate to the solution root
 cd /path/to/FlightMnagementsystem
 
+# Run the application (databases will be created automatically)
+dotnet run --project src/Api/FlightBooking.Api
+```
+
+**Manual Setup (Optional):**
+```bash
 # Install EF Core tools (if not already installed)
 dotnet tool install --global dotnet-ef
 
-# Apply migrations to create database schema
+# Apply migrations manually
 dotnet ef database update --project src/Infrastructure/FlightBooking.Infrastructure --startup-project src/Api/FlightBooking.Api
-
-# Create analytics materialized views
-psql -h localhost -U flightbooking -d FlightBookingDb -f "src/Infrastructure/FlightBooking.Infrastructure/Analytics/SQL/CreateAnalyticsViews.sql"
 ```
 
 ### 6. Build and Run the Application
@@ -184,8 +185,8 @@ The API will be available at:
 ## 🔐 Default Test Credentials
 
 ### Admin User
-- **Email**: `admin@flightbooking.com`
-- **Password**: `Admin123!`
+- **Email**: `admin@flightbooking.local`
+- **Password**: `DevAdmin123!`
 - **Roles**: Admin, Staff
 - **Permissions**: Full access to all endpoints
 

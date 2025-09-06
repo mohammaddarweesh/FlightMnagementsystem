@@ -11,19 +11,17 @@
 
 ### Create Required Databases in pgAdmin:
 
+**Note**: The application now automatically creates databases on startup, but you can create them manually if preferred.
+
 1. Open pgAdmin
 2. Connect to your PostgreSQL server (localhost)
 3. Right-click on "Databases" → "Create" → "Database..."
 4. Create these databases:
 
 ```sql
--- Development databases
-CREATE DATABASE "FlightBookingDb_Dev";
-CREATE DATABASE "FlightBookingHangfire_Dev";
-
--- Production databases (for later)
-CREATE DATABASE "FlightBookingDb";
-CREATE DATABASE "FlightBookingHangfire";
+-- Current personalized databases
+CREATE DATABASE "FlightBookingDb_MohammadDarweesh";
+CREATE DATABASE "flightbookinghangfire_mohammaddarweesh";
 ```
 
 ## 🔴 Redis Installation on Localhost (Windows)

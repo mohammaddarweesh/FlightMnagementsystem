@@ -12,19 +12,19 @@ Open pgAdmin and verify:
 ### 2. Create Flight Booking Database
 In pgAdmin, create a new database:
 ```sql
-CREATE DATABASE "FlightBookingDb";
-CREATE DATABASE "FlightBookingDb_Dev";
-CREATE DATABASE "FlightBookingHangfire";
-CREATE DATABASE "FlightBookingHangfire_Dev";
+CREATE DATABASE "FlightBookingDb_MohammadDarweesh";
+CREATE DATABASE "flightbookinghangfire_mohammaddarweesh";
 ```
 
+**Note**: The application now automatically creates databases on startup, but you can create them manually if preferred.
+
 ### 3. Update Connection Strings
-Update your `appsettings.Development.json`:
+Current configuration in `appsettings.json`:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=FlightBookingDb_Dev;Username=postgres;Password=YOUR_PASSWORD",
-    "Hangfire": "Host=localhost;Database=FlightBookingHangfire_Dev;Username=postgres;Password=YOUR_PASSWORD"
+    "DefaultConnection": "Host=localhost;Database=FlightBookingDb_MohammadDarweesh;Username=postgres;Password=6482297",
+    "Hangfire": "Host=localhost;Database=flightbookinghangfire_mohammaddarweesh;Username=postgres;Password=6482297"
   }
 }
 ```
@@ -43,7 +43,7 @@ Expected response:
 ```json
 {
   "status": "Connected",
-  "database": "FlightBookingDb_Dev",
+  "database": "FlightBookingDb_MohammadDarweesh",
   "message": "Successfully connected to PostgreSQL",
   "timestamp": "2025-01-XX..."
 }
